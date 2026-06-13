@@ -49,7 +49,101 @@ src/
 - `POST /` - Create and process a transaction between accounts
 - `POST /system/initial-funds` - System-initiated fund transfers
 
-## 🔒 Security Features
+## � Prerequisites
+
+Before you begin, ensure you have the following installed:
+- **Node.js** (v14 or higher) - [Download](https://nodejs.org/)
+- **npm** (comes with Node.js)
+- **MongoDB** (local or MongoDB Atlas cloud) - [Setup Guide](https://www.mongodb.com/docs/manual/installation/)
+- **Git** - [Download](https://git-scm.com/)
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/kirtigayatri/Ledger-Service-API.git
+cd Ledger-Service-API
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory and add the following configuration:
+
+```env
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# MongoDB Connection
+MONGODB_URI=mongodb://localhost:27017/ledger-service
+# Or for MongoDB Atlas:
+# MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/ledger-service
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_here
+JWT_EXPIRY=3d
+
+# Email Configuration (Nodemailer)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+EMAIL_FROM=noreply@ledgerservice.com
+```
+
+**Note**: For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833) instead of your regular password.
+
+### 4. Start the Server
+
+**Development Mode** (with auto-restart on file changes):
+```bash
+npm run dev
+```
+
+**Production Mode**:
+```bash
+npm start
+```
+
+The server will start on `http://localhost:3000` by default.
+
+## 🧪 Testing the API
+
+Use **Postman**, **Insomnia**, or **cURL** to test the endpoints.
+
+### Example: Register a User
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "name": "John Doe",
+    "password": "SecurePassword123"
+  }'
+```
+
+### Example: Login
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "SecurePassword123"
+  }'
+```
+
+Use the returned JWT token in the `Authorization` header for protected endpoints:
+```bash
+curl -X GET http://localhost:3000/api/accounts \
+  -H "Authorization: Bearer <your_jwt_token>"
+```
+
+## �🔒 Security Features
 
 - **Password Security**: Bcrypt hashing with salt rounds (10)
 - **JWT Authentication**: 3-day token expiration with refresh capability
